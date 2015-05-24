@@ -16,4 +16,6 @@ Status:
 * I'm doing that in my free time, and there's not much of it...
 * Please don't judge the code, I haven't been coding for years, I'm in product management now, and I just want to graph things, not to build a piece of art...
 
-okofen.png
+
+![Screenshot](https://raw.githubusercontent.com/bertrandgorge/Okofen-Log-Viewer/master/okofen.png)
+
