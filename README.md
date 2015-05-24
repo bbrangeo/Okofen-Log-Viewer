@@ -9,7 +9,7 @@ The aim of the project is to:
 * Be able to optimize the heating cycles
 * Be able to measure the pellet consumption, and be warned when the silo is getting too low
 
-Note: the pellet consumption is measured by watching the numbers of minutes where the extraction motor out of the silo (PE1MotorRA). The concumption of the pellets is constant between two filling. The ratio is currently hardcoded.
+Note: the pellet consumption is measured by watching the numbers of minutes where the worm drive of the silo is on (PE1MotorRA). The concumption of the pellets is constant between two filling. The ratio is currently hardcoded.
 
 Status:
 * The project is very much in its infancy - I've managed to graph something, and to calculate the quantity of pellets that are consumed, but not much more

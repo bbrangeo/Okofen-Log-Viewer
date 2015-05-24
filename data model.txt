@@ -1,0 +1,41 @@
+
+CREATE TABLE IF NOT EXISTS data (
+  Datum datetime NOT NULL,    # 
+  AT decimal(5,1) NOT NULL,    # 		    AT [°C]				  T° Ext
+  KTIst decimal(5,1) NOT NULL,    # 		    KT Ist [°C]				  T° Chaudière
+  KTSoll decimal(5,1) NOT NULL,    # 		    KT Soll [°C]			  T° Chaudière Consigne
+  BR int(1) NOT NULL,    # 			    BR 					  Contact Brûleur
+  HK1VLIst decimal(5,1) NOT NULL,    # 		    HK1 VL Ist[°C]			  T° Départ
+  HK1VLSoll decimal(5,1) NOT NULL,    # 	    HK1 VL Soll[°C]			  T° Départ Consigne
+  HK1RTIst decimal(5,1) NOT NULL,    # 		    HK1 RT Ist[°C]			  T° Ambiante
+  HK1RTSoll decimal(5,1) NOT NULL,    # 	    HK1 RT Soll[°C]			  T° Ambiante Consigne
+  HK1Pumpe int(1) NOT NULL,    # 		    HK1 Pumpe				  Circulateur Chauffage
+  WW1EinTIst decimal(5,1) NOT NULL,    # 	    WW1 EinT Ist[°C]			  T° ECS
+  WW1AusTIst decimal(5,1) NOT NULL,    # 	    WW1 AusT Ist[°C]			  T° ECS
+  WW1Soll decimal(5,1) NOT NULL,    # 		    WW1 Soll[°C]			  T° ECS Consigne
+  WW1Pumpe int(1) NOT NULL,    # 		    WW1 Pumpe				  Circulateur ECS
+  Zubrp1Pumpe int(1) NOT NULL,    # 		    Zubrp1 Pumpe			  Pompe Recirculation
+  PE1KT decimal(5,1) NOT NULL,    # 		    PE1 KT[°C]				  T° Chaudière
+  PE1FRTIst decimal(5,1) NOT NULL,    # 	    PE1 FRT Ist[°C]			  T° Flamme
+  PE1FRTSoll decimal(5,1) NOT NULL,    # 	    PE1 FRT Soll[°C]			  T° Flamme Consigne
+  PE1Einschublaufzeit int(5) NOT NULL,    # 	    PE1 Einschublaufzeit[zs]		  Temps Alimentation
+  PE1Pausenzeit int(5) NOT NULL,    # 		    PE1 Pausenzeit[zs]			  Temps de Pause
+  PE1Luefterdrehzahl int(5) NOT NULL,    # 	    PE1 Luefterdrehzahl[%]		  Ventilation Brûleur
+  PE1Saugzugdrehzahl int(5) NOT NULL,    # 	    PE1 Saugzugdrehzahl[%]		  Ventilation Fumées
+  PE1UnterdruckIst decimal(5,1) NOT NULL,    # 	    PE1 Unterdruck Ist[Pa]		  Dépression
+  PE1UnterdruckSoll decimal(5,1) NOT NULL,    #     PE1 Unterdruck Soll[Pa]		  Dépression Consigne
+  PE1Status int(5) NOT NULL,    # 		    PE1 Status				  Status Chaudière
+  PE1MotorES int(1) NOT NULL,    # 		    PE1 Motor ES			  Moteur Alimentation Brûleur
+  PE1MotorRA int(1) NOT NULL,    # 		    PE1 Motor RA			  Moteur Extraction Silo
+  PE1MotorRES1 int(1) NOT NULL,    # 		    PE1 Motor RES1			  Moteur Trémie Intermédiaire
+  PE1MotorTURBINE int(1) NOT NULL,    # 	    PE1 Motor TURBINE			  Moteur Aspiration
+  PE1MotorZUEND int(1) NOT NULL,    # 		    PE1 Motor ZUEND			  Moteur Allumage
+  PE1MotorUW int(5) NOT NULL,    # 		    PE1 Motor UW[%]			  Pompe de Circuit Primaire
+  PE1MotorAV int(1) NOT NULL,    # 		    PE1 Motor AV			  Moteur Cendrier Extérieur
+  PE1MotorRES2 int(1) NOT NULL,    # 		    PE1 Motor RES2			  N/A
+  PE1MotorMA int(1) NOT NULL,    # 		    PE1 Motor MA			  Moteur Electrovanne
+  PE1MotorRM int(1) NOT NULL,    # 		    PE1 Motor RM			  Moteur Ramonage
+  PE1MotorSM int(1) NOT NULL,    # 		    PE1 Motor SM			  
+  PRIMARY KEY (Datum)     
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
