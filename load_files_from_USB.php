@@ -5,7 +5,12 @@
 require_once('common.inc.php');
 bootstrap();
 
+if (!is_dir('backup'))
+	mkdir ('backup');
+
 ImportFiles();
+
+echo '<br>ok';
 
 function ImportFiles()
 {
