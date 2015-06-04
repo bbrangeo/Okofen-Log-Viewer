@@ -1,4 +1,4 @@
-<?php
+<pre><?php
 // Will load all CSV files that are in inputfiles
 // Once loaded the files are copied in backup.
 
@@ -18,13 +18,19 @@ function ImportFiles()
 	foreach ($files as $afile)
 	{
 		echo $afile . '<br>';
-
+		$c = 0;
+	
 		$rows = file($afile);
 		$header_row = array_shift($rows);
 
 		foreach ($rows as $row)
 		{
+			$row = trim($row);
+			if (empty($row))
+				continue;
+			
 			$data = explode(';', $row);
+				
 			$dummy = array_pop($data); // remove the last item - empty
 			$date = array_reverse(explode('.', array_shift($data)));
 
@@ -39,9 +45,16 @@ function ImportFiles()
 
 			$result = mysql_query($sql, $GLOBALS['db']);
 			if (!$result)
-			    die('Requête invalide : ' . $sql . '<br>' . mysql_error());
+			{
+				echo $row . '<br>';
+				print_r($data);
+			  die('Invalid SQL: ' . $sql . '<br>' . mysql_error());
+			}
+			else 
+				$c++;
 		}
 
 		rename($afile, str_replace('inputfiles', 'backup', $afile));
+		echo "File $afile imported, $c rows processed.<br>";
 	}
 }
