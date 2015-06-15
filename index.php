@@ -16,8 +16,10 @@ $(function () {
         seriesCounter = 0,
         okofenSeries = [{name: 'TExt', type: 'temp', pane: 0, type: 'line', pointInterval: 1},
 												{name: 'TInt', type: 'temp', pane: 0, type: 'line', pointInterval: 1}, 
-												{name: 'TDepartChaudiere', type: 'chaudiere', pane: 1, type: 'line', pointInterval: 1},
-												{name: 'TDepartECS', type: 'chaudiere', pane: 1, type: 'line', pointInterval: 1},
+												{name: 'TChaudiere', type: 'chaudiere', pane: 1, type: 'line', pointInterval: 1},
+												{name: 'TDepart', type: 'chaudiere', pane: 1, type: 'line', pointInterval: 1},
+												{name: 'ECS1 T demarrage', type: 'chaudiere', pane: 1, type: 'line', pointInterval: 1},
+												{name: 'PE1 T flamme', type: 'chaudiere', pane: 1, type: 'line', pointInterval: 1},
 												{name: 'Pellets', type: 'Pellets', pane: 2, type: 'column', pointInterval: 24 * 3600 * 1000}
 												],
         // create the chart when all data is loaded

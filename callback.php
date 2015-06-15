@@ -28,8 +28,11 @@ $endTime = gmstrftime('%Y-%m-%d %H:%M:%S', $end / 1000);
 $value = $_GET['value'];
 switch ($value)
 {
-	case 'TDepartChaudiere':	$sql = "SELECT unix_timestamp(Datum) * 1000, HK1VLIst * HK1Pumpe"; break;
-	case 'TDepartECS':	$sql = "SELECT unix_timestamp(Datum) * 1000, HK1VLIst * WW1Pumpe"; break;
+	case 'TChaudiere':	      $sql = "SELECT unix_timestamp(Datum) * 1000, KTIst"; break;
+	case 'TDepart':           $sql = "SELECT unix_timestamp(Datum) * 1000, HK1VLIst"; break;
+	case 'ECS1 T demarrage':  $sql = "SELECT unix_timestamp(Datum) * 1000, WW1EinTIst"; break; // DHW1 On Temperature 
+	case 'PE1 T flamme':	    $sql = "SELECT unix_timestamp(Datum) * 1000, PE1FRTIst / 6"; break; // PE1 Comb Chamber T
+	
 	case 'TInt': 	$sql = "SELECT unix_timestamp(Datum) * 1000, HK1RTIst"; break;
 	default:
 	case 'TExt': 	$sql = "SELECT unix_timestamp(Datum) * 1000, AT"; break;
