@@ -71,7 +71,7 @@ class okofen
     $end_date = $row['fill_date'];
       
     // Now get the last time the silo has been filed before that:
-    $sql = "SELECT fill_date, quantity 
+    $sql = "SELECT fill_date 
             FROM pellets 
             WHERE fill_date < '$end_date' 
             ORDER BY fill_date 
@@ -86,7 +86,6 @@ class okofen
     }      
 
     $start_date = $row['fill_date'];
-    $quantity = $row['quantity'];
 
     $sql = "SELECT COUNT(*) AS nb_minutes_of_worm_drive
             FROM data
@@ -102,7 +101,7 @@ class okofen
     
     $nb_minutes_of_worm_drive = $row['nb_minutes_of_worm_drive'];
     
-    $this->quantity_per_minute = $quantity / $nb_minutes_of_worm_drive;
+    $this->quantity_per_minute = $this->size / $nb_minutes_of_worm_drive;
     
     return true;
   }
@@ -171,7 +170,7 @@ class okofen
     $this->SiloStatusCalculated = true;
         
     // Get the last time the silo has been filed:
-    $sql = "SELECT fill_date, quantity 
+    $sql = "SELECT fill_date 
             FROM pellets 
             ORDER BY fill_date 
             DESC LIMIT 1";      
@@ -185,8 +184,7 @@ class okofen
     }      
     
     $fill_date = $row['fill_date'];
-    $quantity = $row['quantity'];
-    
+
     // Now get how many minutes we've been consuming
     $sql = "SELECT COUNT(*) AS nb_minutes_of_worm_drive
             FROM data
