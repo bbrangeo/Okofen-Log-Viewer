@@ -18,6 +18,9 @@ class okofen
   private $quantity_per_month = array();
   private $SiloDataCalculated = false;
   private $SiloStatusCalculated = false;
+  private $quantity_per_month_year = array();
+  private $heating_per_month_year = array();
+  private $hot_water_per_month_year = array();
   
   //put your code here
   
@@ -42,7 +45,9 @@ class okofen
     $this->SiloDataCalculated = true;
     
     $this->calculateWoodQuantityPerWormDriveMinute();
-    $this->calculateAverageConsumptionPerMonth();    
+    $this->calculateAverageConsumptionPerMonth();  
+    
+    $this->calculateConsumptionPerMonth();
   }
   
   /**
@@ -102,7 +107,7 @@ class okofen
     $nb_minutes_of_worm_drive = $row['nb_minutes_of_worm_drive'];
     
     $this->quantity_per_minute = $this->size / $nb_minutes_of_worm_drive;
-    
+
     return true;
   }
   
@@ -266,4 +271,158 @@ class okofen
   }
   
   
+
+  /**
+   * Builds a usage per month
+   */
+  private function calculateConsumptionPerMonth()
+  {
+    // Lets calculate the quantity of wood used per month 
+    $sql = "SELECT YEAR(Datum) AS y, MONTH(Datum) AS m, COUNT(*) AS nb_minutes_of_worm_drive
+            FROM data
+            WHERE PE1MotorRA = 1
+            GROUP BY YEAR(Datum), MONTH(Datum)
+            ORDER BY y ASC, m ASC";
+    
+    $result = mysql_query($sql);
+    $minutes_per_month = array();
+
+    $this->quantity_per_month_year = array();
+    while ($row = mysql_fetch_assoc($result))
+    {
+      $year = $row['y'];
+      $month = $row['m'];
+      $minutes = $row['nb_minutes_of_worm_drive'];
+      if (empty($this->quantity_per_month_year[$year][$month]))
+        $this->quantity_per_month_year[$year][$month] = $minutes * $this->quantity_per_minute;
+    }
+
+
+    $sql = "SELECT YEAR(Datum) AS y, MONTH(Datum) AS m, COUNT(*) AS nb_minutes_of_ww_pumpe
+            FROM data
+            WHERE WW1Pumpe = 1
+            GROUP BY YEAR(Datum), MONTH(Datum)
+            ORDER BY y ASC, m ASC";
+    
+    $result = mysql_query($sql);
+    $minutes_per_month = array();
+
+		$max = 0;
+
+    $this->hot_water_per_month_year = array();
+    while ($row = mysql_fetch_assoc($result))
+    {
+      $year = $row['y'];
+      $month = $row['m'];
+      $minutes = $row['nb_minutes_of_ww_pumpe'];
+      if (empty($this->hot_water_per_month_year[$year][$month]))
+        $this->hot_water_per_month_year[$year][$month] = $minutes;
+        
+      if ($max < $minutes)
+      	$max = $minutes;
+    }
+
+		$this->percentize($this->hot_water_per_month_year, $max);
+
+    $sql = "SELECT YEAR(Datum) AS y, MONTH(Datum) AS m, COUNT(*) AS nb_minutes_of_hk_pumpe
+            FROM data
+            WHERE HK1Pumpe = 1
+            GROUP BY YEAR(Datum), MONTH(Datum)
+            ORDER BY y ASC, m ASC";
+    
+    $result = mysql_query($sql);
+    $minutes_per_month = array();
+		$max = 0;
+
+    $this->heating_per_month_year = array();
+    while ($row = mysql_fetch_assoc($result))
+    {
+      $year = $row['y'];
+      $month = $row['m'];
+      $minutes = $row['nb_minutes_of_hk_pumpe'];
+      if (empty($this->heating_per_month_year[$year][$month]))
+        $this->heating_per_month_year[$year][$month] = $minutes;
+        
+      if ($max < $minutes)
+      	$max = $minutes;        
+    }
+		$this->percentize($this->heating_per_month_year, $max);
+
+    return true;
+  }
+  
+	private function percentize(&$theArray, $max)
+	{
+		foreach ($theArray as $y => $subArray)
+		{
+			foreach ($subArray as $m => $v)
+				$theArray[$y][$m] = 100 * $v / $max;
+		}
+	}
+	
+  private function buildUsageCalendar($data, $unit, $colorscale = false)
+  {
+  	$str = '<table>';
+
+		$str .= "<tr><td>Year</td>";
+
+		$months = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
+
+		$colors = array(100 => '#57BB8A',
+										 90 => '#67C195',
+										 80 => '#78C8A1',
+										 70 => '#89CFAD',
+										 60 => '#9AD6B8',
+										 50 => '#ABDDC4',
+										 40 => '#BBE3D0',
+										 30 => '#CCEADB',
+										 20 => '#DDF1E7',
+										 10 => '#EEF8F3',
+										  0 => '#FFFFFF');
+
+		foreach ($months as $k => $name)
+		{
+			$str .= "<td style=\"width:70px; text-align: right\">$name</td>";
+		}
+
+		$str .= "</tr>";
+
+
+  	foreach ($data as $year => $monthsUsage)
+  	{
+  		$str .= "<tr><td>$year</td>";
+
+			foreach ($months as $m => $name)
+  		{
+  			if (isset($monthsUsage[$m]))
+  				$qty = number_format($monthsUsage[$m], 0, ',', ' ');
+  			else
+	  			$qty = 0;
+	  			
+	  		if ($colorscale)
+					$color = $colors[round($qty / 10) * 10];
+	  		else
+	  			$color = $colors[0];
+	  			
+	  		$str .= "<td style=\"background-color: $color;width:70px; text-align: right\">$qty $unit</td>";
+	  	}
+	  	
+	  	$str .= "</tr>";
+  	}
+  	
+  	$str .= "</table>";
+  	
+  	return $str;
+  }  
+  
+  public function buildUsageCalendarTable($type = 'pellets')
+  {
+  	switch ($type)
+  	{
+  		case 'pellets': return $this->buildUsageCalendar($this->quantity_per_month_year, ' kg');
+  		case 'heating': return $this->buildUsageCalendar($this->heating_per_month_year, '%', true);
+  		case 'hot_water': return $this->buildUsageCalendar($this->hot_water_per_month_year, '%', true);
+  	}
+  	
+  }
 }

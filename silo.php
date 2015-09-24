@@ -21,5 +21,21 @@
     <span style="font-size: 50px"><?php echo $siloData['current_%']; ?>%</span> <span>(reste <?php echo $siloData['current_t']; ?> t)</span><br/>
     <span style="font-style: italic">Prochain remplissage: <?php echo $siloData['estimatedFillDate']->format('d/m/Y'); ?></span>
 </fieldset>
+
+<fieldset style="width: 935px"><legend>Pelets</legend>
+    
+    <?php echo $silo->buildUsageCalendarTable('pellets'); ?>
+    
+</fieldset>
+<fieldset style="width: 935px"><legend>Heating</legend>
+    
+    <?php echo $silo->buildUsageCalendarTable('heating'); ?>
+    
+</fieldset>
+<fieldset style="width: 935px"><legend>Hot water</legend>
+    
+    <?php echo $silo->buildUsageCalendarTable('hot_water'); ?>
+    
+</fieldset>
 </body>
 </html>
